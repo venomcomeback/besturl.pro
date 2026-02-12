@@ -1,0 +1,161 @@
+{
+  "app_name": "LinkShortTR",
+  "persona": "E1 - The Anti-AI Designer",
+  "design_philosophy": {
+    "theme": "Electric Professional",
+    "core_concept": "High-performance link management with a cyber-security aesthetic. Dark, moody, but electrified with neon cyan accents.",
+    "emotional_tone": "Precise, Secure, Fast, Elite.",
+    "key_principles": [
+      "No Generic Gradients: Use deep, rich solids or subtle noise textures.",
+      "Neon for Action: Cyan (#00E5FF) is ONLY for primary actions and active states.",
+      "Density with Breath: High information density in dashboards, but separated by wide gaps (gap-6+).",
+      "Glass without Mud: Use high-clarity glassmorphism (backdrop-blur-xl + saturate-150) for overlays."
+    ]
+  },
+  "typography": {
+    "headings": {
+      "family": "Manrope",
+      "fallback": "sans-serif",
+      "usage": "All headings (H1-H6). Use font-weight 700 or 800 for impact.",
+      "styles": "tracking-tight"
+    },
+    "body": {
+      "family": "Inter",
+      "fallback": "sans-serif",
+      "usage": "General text, paragraphs, labels.",
+      "styles": "text-slate-300 leading-relaxed"
+    },
+    "monospace": {
+      "family": "JetBrains Mono",
+      "fallback": "monospace",
+      "usage": "Analytics data, URL displays, code snippets.",
+      "styles": "text-cyan-400"
+    }
+  },
+  "colors": {
+    "background": {
+      "default": "#0A0A0B",
+      "paper": "#121214",
+      "subtle": "#1C1C1E"
+    },
+    "primary": {
+      "default": "#06B6D4",
+      "hover": "#22D3EE",
+      "foreground": "#FFFFFF",
+      "glow": "0 0 20px rgba(6, 182, 212, 0.4)"
+    },
+    "accents": {
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "error": "#EF4444",
+      "info": "#3B82F6"
+    },
+    "text": {
+      "primary": "#F8FAFC",
+      "secondary": "#94A3B8",
+      "muted": "#64748B"
+    },
+    "forbidden": [
+      "#1B93A4",
+      "Generic SaaS Blue",
+      "Pure Black (#000000)"
+    ]
+  },
+  "visual_enhancers": {
+    "borders": "1px solid rgba(255, 255, 255, 0.08)",
+    "glassmorphism": "bg-black/40 backdrop-blur-xl backdrop-saturate-150 border-white/10",
+    "shadows": {
+      "card": "0 4px 24px -12px rgba(0, 0, 0, 0.5)",
+      "glow": "0 0 15px rgba(6, 182, 212, 0.3)"
+    },
+    "rounded": {
+      "default": "rounded-xl",
+      "button": "rounded-lg",
+      "card": "rounded-2xl"
+    }
+  },
+  "components": {
+    "shadcn_required": [
+      "Button",
+      "Input",
+      "Card",
+      "Table",
+      "Dialog",
+      "DropdownMenu",
+      "Tabs",
+      "Avatar",
+      "Badge",
+      "Form",
+      "Select",
+      "Switch",
+      "Toaster"
+    ],
+    "custom_components": [
+      {
+        "name": "NeonButton",
+        "description": "Primary CTA with a subtle cyan glow. Transitions to brighter glow on hover.",
+        "styles": "bg-cyan-600 hover:bg-cyan-500 text-white shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all duration-300 hover:shadow-[0_0_25px_rgba(34,211,238,0.5)]"
+      },
+      {
+        "name": "GlassCard",
+        "description": "Container for analytics widgets.",
+        "styles": "bg-zinc-900/50 backdrop-blur-md border border-white/5 shadow-2xl"
+      },
+      {
+        "name": "DataMetric",
+        "description": "Displays a single stat with trend.",
+        "styles": "flex flex-col gap-1 p-4 border border-white/5 rounded-xl bg-gradient-to-br from-white/5 to-transparent"
+      }
+    ]
+  },
+  "layout_strategy": {
+    "dashboard": {
+      "type": "sidebar_layout",
+      "structure": "Fixed left sidebar (w-64), scrollable main content area.",
+      "grid": "Bento Grid: Mixed columns. Hero stats top (4 cols), Main Chart (2/3 width), Recent Activity (1/3 width)."
+    },
+    "landing_page": {
+      "type": "hero_centric",
+      "structure": "Navbar (Sticky Glass) -> Hero (Centered, Impact) -> Features (Bento Grid) -> Pricing -> Footer.",
+      "details": "The hero section must have a 'Shorten Link' input that feels like a powerful command line tool."
+    }
+  },
+  "motion": {
+    "transitions": "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    "hover_effects": "Slight lift (-2px) and glow intensification.",
+    "page_load": "Fade in with slight upward drift."
+  },
+  "image_urls": {
+    "hero_background": "https://images.unsplash.com/photo-1698669993523-bcf101a925ef?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1ODF8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMGRpZ2l0YWwlMjBuZXR3b3JrfGVufDB8fHxibHVlfDE3NzA4NTc4OTl8MA&ixlib=rb-4.1.0&q=85",
+    "feature_tech": "https://images.unsplash.com/photo-1759661881353-5b9cc55e1cf4?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NjV8MHwxfHNlYXJjaHwxfHxmdXR1cmlzdGljJTIwY3liZXIlMjBzZWN1cml0eSUyMGFic3RyYWN0JTIwZGFya3xlbnwwfHx8fDE3NzA4NTc4OTN8MA&ixlib=rb-4.1.0&q=85",
+    "user_testimonial": "https://images.unsplash.com/photo-1758518727592-706e80ebc354?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1OTV8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBidXNpbmVzcyUyMHBvcnRyYWl0JTIwbW9kZXJufGVufDB8fHx8MTc3MDg1Nzg5NHww&ixlib=rb-4.1.0&q=85"
+  },
+  "instructions_to_main_agent": [
+    "CRITICAL: All user-facing text (Buttons, Labels, Headings, Descriptions) MUST BE IN TURKISH.",
+    "Use 'tr-TR' locale for dates and numbers.",
+    "Implement the 'Sidebar' navigation shown in the reference image (Paste Link, Customize, Shorten, Track).",
+    "The 'Customize' section should be a distinct card with 'Custom Domain' and 'QR Code' toggles.",
+    "Ensure the Dashboard uses the 'Electric Professional' color palette. No muddy greens.",
+    "Use Lucide-React icons for all UI icons (Home, Link, QrCode, BarChart3, Settings, etc.)."
+  ],
+  "universal_guidelines_for_main_agent": [
+    "You tend to converge toward generic, 'on distribution' outputs. In frontend design, this creates what users call the 'AI slop' aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy",
+    "Use glass-morphism effects with backdrop filters (12-24px blur)",
+    "You MUST NOT apply universal transition. Eg: 'transition: all'. This results in breaking transforms. Always add transitions for specific interactive elements like button, input excluding transforms",
+    "You MUST NOT center align the app container, ie do not add '.App { text-align: center; }' in the css file. This disrupts the human natural reading flow of text",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Subtle grain textures, noise overlays, custom cursors: separates good from extraordinary.",
+    "Main agent relies on these image URLs. Missing categories = main agent will use placeholder text which is FORBIDDEN",
+    "Prioritize using pre-existing components from src/components/ui when applicable",
+    "Components MUST use named exports",
+    "Pages MUST use default exports",
+    "Use 'sonner' for toasts",
+    "All interactive and key informational elements MUST include a 'data-testid' attribute to facilitate robust automated testing."
+  ]
+}
