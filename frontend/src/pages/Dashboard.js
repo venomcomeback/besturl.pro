@@ -335,7 +335,7 @@ const Dashboard = () => {
             ) : filteredLinks.length === 0 ? (
               <div className="p-12 text-center">
                 <div className="empty-state-icon">
-                  <Link2 className="w-10 h-10 text-cyan-400" />
+                  <img src="/favicon.png" alt="Link" className="w-10 h-10" />
                 </div>
                 <h3 className="text-lg font-medium text-white mb-2">
                   {searchQuery ? 'Sonuç bulunamadı' : 'Henüz link yok'}
