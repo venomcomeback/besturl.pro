@@ -188,7 +188,8 @@ async def register(user_data: UserCreate):
     user_dict["password_hash"] = hash_password(user_data.password)
     user_dict["created_at"] = user_dict["created_at"].isoformat()
     
-    await db.users.insert_one(user_dict)
+    insert_dict = user_dict.copy()
+    await db.users.insert_one(insert_dict)
     
     access_token = create_access_token({"sub": user.id, "username": user.username, "is_admin": user.is_admin})
     return Token(
@@ -256,10 +257,13 @@ async def create_link(link_data: LinkCreate, current_user: dict = Depends(get_cu
     if link_dict.get("expires_at"):
         link_dict["expires_at"] = link_dict["expires_at"].isoformat()
     
-    await db.links.insert_one(link_dict)
+    # Create a copy for insertion to avoid _id being added to response
+    insert_dict = link_dict.copy()
+    await db.links.insert_one(insert_dict)
     
     # Remove password_hash from response
     link_dict.pop("password_hash", None)
+    link_dict.pop("_id", None)
     link_dict["has_password"] = link_data.password is not None
     
     return link_dict
