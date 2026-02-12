@@ -2,10 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
-  Link2, ArrowLeft, Copy, ExternalLink, Trash2, Edit,
+  ArrowLeft, Copy, ExternalLink, Trash2, Edit,
   MousePointerClick, Monitor, Smartphone, Tablet, Globe,
   Clock, TrendingUp, Users, Chrome, Calendar
 } from 'lucide-react';
+
+const DOMAIN = 'besturl.pro';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -94,7 +96,7 @@ const LinkDetails = () => {
   };
 
   const getShortUrl = (shortCode) => {
-    return `${process.env.REACT_APP_BACKEND_URL}/api/r/${shortCode}`;
+    return `https://${DOMAIN}/${shortCode}`;
   };
 
   const getDeviceIcon = (device) => {
@@ -356,7 +358,7 @@ const LinkDetails = () => {
           {/* Referrers */}
           <div className="bg-[#121214] rounded-2xl border border-white/5 p-6">
             <div className="flex items-center gap-3 mb-4">
-              <Link2 className="w-5 h-5 text-cyan-400" />
+              <img src="/favicon.png" alt="Link" className="w-5 h-5" />
               <h3 className="text-lg font-semibold text-white">Kaynaklar</h3>
             </div>
             {referrerData.length > 0 ? (

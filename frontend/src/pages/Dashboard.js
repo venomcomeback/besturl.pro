@@ -3,11 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { QRCodeSVG } from 'qrcode.react';
 import { 
-  Link2, BarChart3, Plus, Search, Copy, ExternalLink, 
+  BarChart3, Plus, Search, Copy, ExternalLink, 
   Trash2, Edit, QrCode, MoreVertical, Home, Settings,
   LogOut, Shield, TrendingUp, MousePointerClick, Calendar,
   Menu, X, Eye, EyeOff, Lock, Clock, Download
 } from 'lucide-react';
+
+const API_URL = process.env.REACT_APP_BACKEND_URL + '/api';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -28,7 +30,7 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL + '/api';
+const DOMAIN = 'besturl.pro';
 
 const Dashboard = () => {
   const { user, token, logout, isAdmin } = useAuth();
@@ -155,7 +157,7 @@ const Dashboard = () => {
   };
 
   const getShortUrl = (shortCode) => {
-    return `${process.env.REACT_APP_BACKEND_URL}/api/r/${shortCode}`;
+    return `https://${DOMAIN}/${shortCode}`;
   };
 
   const filteredLinks = links.filter(link => 
@@ -177,10 +179,7 @@ const Dashboard = () => {
           {/* Logo */}
           <div className="p-6 border-b border-white/5">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-                <Link2 className="w-5 h-5 text-cyan-400" />
-              </div>
-              <span className="text-xl font-bold text-white">LinkShortTR</span>
+              <img src="/logo.png" alt="BestURL" className="h-9 w-auto" />
             </Link>
           </div>
 
@@ -273,7 +272,7 @@ const Dashboard = () => {
             <div className="stat-card" data-testid="stat-total-links">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center">
-                  <Link2 className="w-5 h-5 text-cyan-400" />
+                  <img src="/favicon.png" alt="Link" className="w-5 h-5" />
                 </div>
               </div>
               <p className="text-sm text-slate-500 mb-1">Toplam Link</p>
@@ -336,7 +335,7 @@ const Dashboard = () => {
             ) : filteredLinks.length === 0 ? (
               <div className="p-12 text-center">
                 <div className="empty-state-icon">
-                  <Link2 className="w-10 h-10 text-cyan-400" />
+                  <img src="/favicon.png" alt="Link" className="w-10 h-10" />
                 </div>
                 <h3 className="text-lg font-medium text-white mb-2">
                   {searchQuery ? 'Sonuç bulunamadı' : 'Henüz link yok'}
@@ -486,7 +485,7 @@ const Dashboard = () => {
             <div className="space-y-2">
               <Label className="text-slate-300">Özel Kısa URL (Opsiyonel)</Label>
               <div className="flex items-center gap-2">
-                <span className="text-slate-500 text-sm">linkshort.tr/</span>
+                <span className="text-slate-500 text-sm">{DOMAIN}/</span>
                 <Input
                   type="text"
                   placeholder="kampanya"

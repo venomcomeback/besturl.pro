@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Link2, BarChart3, QrCode, Globe, Shield, Zap, ArrowRight, ChevronRight, Check, Menu, X } from 'lucide-react';
+import { BarChart3, QrCode, Globe, Shield, Zap, ArrowRight, ChevronRight, Check, Menu, X } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { useAuth } from '../contexts/AuthContext';
+
+const DOMAIN = 'besturl.pro';
 
 const LandingPage = () => {
   const [url, setUrl] = useState('');
@@ -20,7 +22,7 @@ const LandingPage = () => {
 
   const features = [
     {
-      icon: Link2,
+      icon: () => <img src="/logo.png" alt="Link" className="w-6 h-6" />,
       title: 'Özel Kısa Linkler',
       description: 'Kendi domain adresinizle profesyonel kısa linkler oluşturun.'
     },
@@ -65,10 +67,7 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center">
-                <Link2 className="w-5 h-5 text-cyan-400" />
-              </div>
-              <span className="text-xl font-bold text-white">LinkShortTR</span>
+              <img src="/logo.png" alt="BestURL" className="h-10 w-auto" />
             </div>
 
             {/* Desktop Menu */}
@@ -171,7 +170,6 @@ const LandingPage = () => {
                   className="h-14 px-8 bg-cyan-600 hover:bg-cyan-500 text-white font-semibold shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(34,211,238,0.6)]"
                   data-testid="hero-shorten-btn"
                 >
-                  <Link2 className="w-5 h-5 mr-2" />
                   Kısalt
                 </Button>
               </form>
@@ -236,7 +234,7 @@ const LandingPage = () => {
                   <p className="text-sm text-slate-400 mb-3">Kendi domain adresinizle profesyonel kısa linkler</p>
                   <div className="flex items-center gap-2">
                     <code className="text-xs text-cyan-400 bg-cyan-500/10 px-3 py-1 rounded-md font-mono">
-                      marka.co/kampanya
+                      {DOMAIN}/kampanya
                     </code>
                   </div>
                 </div>
@@ -266,7 +264,7 @@ const LandingPage = () => {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-4 group-hover:bg-cyan-500/20 transition-colors duration-300">
-                  <feature.icon className="w-6 h-6 text-cyan-400" />
+                  {typeof feature.icon === 'function' ? feature.icon() : <feature.icon className="w-6 h-6 text-cyan-400" />}
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">{feature.title}</h3>
                 <p className="text-slate-400 text-sm leading-relaxed">{feature.description}</p>
@@ -374,13 +372,10 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-cyan-500/20 flex items-center justify-center">
-                <Link2 className="w-5 h-5 text-cyan-400" />
-              </div>
-              <span className="text-lg font-bold text-white">LinkShortTR</span>
+              <img src="/logo.png" alt="BestURL" className="h-8 w-auto" />
             </div>
             <p className="text-slate-500 text-sm">
-              © 2026 LinkShortTR. Tüm hakları saklıdır.
+              © 2026 BestURL. Tüm hakları saklıdır.
             </p>
           </div>
         </div>

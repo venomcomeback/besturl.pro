@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Link2, Eye, EyeOff, ArrowLeft, Check } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft, Check } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -64,7 +64,7 @@ const RegisterPage = () => {
             Profesyonel Link Yönetimi
           </h2>
           <p className="text-slate-400 mb-8">
-            LinkShortTR ile linklerinizi kısaltın, analiz edin ve tam kontrol altında tutun.
+            BestURL ile linklerinizi kısaltın, analiz edin ve tam kontrol altında tutun.
           </p>
 
           <div className="space-y-4">
@@ -106,10 +106,7 @@ const RegisterPage = () => {
           </Link>
 
           <div className="flex items-center gap-2 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-              <Link2 className="w-6 h-6 text-cyan-400" />
-            </div>
-            <span className="text-2xl font-bold text-white">LinkShortTR</span>
+            <img src="/logo.png" alt="BestURL" className="h-10 w-auto" />
           </div>
 
           <div className="mb-8">

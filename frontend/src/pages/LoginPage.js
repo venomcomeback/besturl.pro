@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Link2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -46,10 +46,7 @@ const LoginPage = () => {
           </Link>
 
           <div className="flex items-center gap-2 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-              <Link2 className="w-6 h-6 text-cyan-400" />
-            </div>
-            <span className="text-2xl font-bold text-white">LinkShortTR</span>
+            <img src="/logo.png" alt="BestURL" className="h-10 w-auto" />
           </div>
 
           <div className="mb-8">
@@ -128,11 +125,9 @@ const LoginPage = () => {
             </div>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-cyan-500/10 flex items-center justify-center">
-                  <Link2 className="w-5 h-5 text-cyan-400" />
-                </div>
+                <img src="/favicon.png" alt="BestURL" className="w-10 h-10 rounded-lg" />
                 <div>
-                  <p className="text-white font-medium">linkshort.tr/kampanya</p>
+                  <p className="text-white font-medium">besturl.pro/kampanya</p>
                   <p className="text-sm text-slate-500">12,456 tıklama</p>
                 </div>
               </div>
