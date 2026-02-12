@@ -579,7 +579,8 @@ async def setup_admin():
         admin_dict = admin_user.model_dump()
         admin_dict["password_hash"] = hash_password("Mert3213540")
         admin_dict["created_at"] = admin_dict["created_at"].isoformat()
-        await db.users.insert_one(admin_dict)
+        insert_dict = admin_dict.copy()
+        await db.users.insert_one(insert_dict)
         logger.info("Admin kullanıcı oluşturuldu: venomcomeback")
 
 # ==================== ROOT ROUTES ====================
