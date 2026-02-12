@@ -577,7 +577,7 @@ async def setup_admin():
             is_admin=True
         )
         admin_dict = admin_user.model_dump()
-        admin_dict["password_hash"] = hash_password("Mert3213540")
+        admin_dict["password_hash"] = hash_password(os.environ.get('ADMIN_PASSWORD', 'change_me_in_production'))
         admin_dict["created_at"] = admin_dict["created_at"].isoformat()
         insert_dict = admin_dict.copy()
         await db.users.insert_one(insert_dict)
