@@ -1,13 +1,14 @@
-# LinkShortTR - Link Kısaltma Servisi PRD
+# BestURL - Link Kısaltma Servisi PRD
 
 ## Orijinal Gereksinim
-Kendi domain üzerinden linkleri kısaltmaya ve o linklerin tüm istatistiklerini görmeye yarayan bir site - cutt.ly mantığında. Türkçe dil desteği.
+Kendi domain (besturl.pro) üzerinden linkleri kısaltmaya ve o linklerin tüm istatistiklerini görmeye yarayan bir site - cutt.ly mantığında. Türkçe dil desteği.
 
 ## Mimarisi
 - **Frontend:** React + Tailwind CSS + Shadcn UI
 - **Backend:** FastAPI (Python)
 - **Veritabanı:** MongoDB
 - **Authentication:** JWT Token
+- **Domain:** besturl.pro
 
 ## Kullanıcı Personaları
 1. **Admin (venomcomeback):** Tüm sistem kontrolü, kullanıcı yönetimi
