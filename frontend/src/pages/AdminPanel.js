@@ -11,7 +11,8 @@ import { Input } from '../components/ui/input';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL + '/api';
+// VPS için sabit API URL
+const API_URL = 'https://besturl.pro/api';
 
 const AdminPanel = () => {
   const { token, user, logout } = useAuth();
@@ -38,9 +39,11 @@ const AdminPanel = () => {
       const response = await axios.get(`${API_URL}/admin/users`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setUsers(response.data);
+      // Kurşun geçirmez veri kontrolü
+      setUsers(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Failed to fetch users:', error);
+      setUsers([]);
     }
   }, [token]);
 
@@ -81,9 +84,10 @@ const AdminPanel = () => {
     }
   };
 
-  const filteredUsers = users.filter(u => 
-    u.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    u.email?.toLowerCase().includes(searchQuery.toLowerCase())
+  // Kurşun geçirmez filter
+  const filteredUsers = (Array.isArray(users) ? users : []).filter(u => 
+    u?.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    u?.email?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleLogout = () => {
@@ -137,7 +141,7 @@ const AdminPanel = () => {
                 <Shield className="w-5 h-5 text-amber-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white font-medium truncate">{user?.username}</p>
+                <p className="text-white font-medium truncate">{user?.username || 'Admin'}</p>
                 <p className="text-xs text-amber-400">Admin</p>
               </div>
             </div>
@@ -232,12 +236,12 @@ const AdminPanel = () => {
                   <h2 className="text-lg font-semibold text-white">Son Kullanıcılar</h2>
                 </div>
                 <div className="divide-y divide-white/5">
-                  {users.slice(0, 5).map((u) => (
+                  {(Array.isArray(users) ? users : []).slice(0, 5).map((u) => (
                     <div key={u.id} className="p-4 sm:p-6 flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className={`w-10 h-10 rounded-full flex items-center justify-center ${u.is_admin ? 'bg-amber-500/20' : 'bg-cyan-500/20'}`}>
                           <span className={`font-semibold ${u.is_admin ? 'text-amber-400' : 'text-cyan-400'}`}>
-                            {u.username?.charAt(0).toUpperCase()}
+                            {u.username?.charAt(0).toUpperCase() || 'U'}
                           </span>
                         </div>
                         <div>
@@ -247,8 +251,8 @@ const AdminPanel = () => {
                       </div>
                       <div className="flex items-center gap-4">
                         <span className="text-cyan-400 font-medium">{u.link_count || 0} link</span>
-                        <span className={`badge ${u.is_active ? 'badge-success' : 'badge-error'}`}>
-                          {u.is_active ? 'Aktif' : 'Pasif'}
+                        <span className={`badge ${u.is_active !== false ? 'badge-success' : 'badge-error'}`}>
+                          {u.is_active !== false ? 'Aktif' : 'Pasif'}
                         </span>
                       </div>
                     </div>
@@ -298,13 +302,13 @@ const AdminPanel = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredUsers.map((u) => (
+                    {(Array.isArray(filteredUsers) ? filteredUsers : []).map((u) => (
                       <tr key={u.id} data-testid={`user-row-${u.id}`}>
                         <td>
                           <div className="flex items-center gap-3">
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${u.is_admin ? 'bg-amber-500/20' : 'bg-cyan-500/20'}`}>
                               <span className={`text-sm font-semibold ${u.is_admin ? 'text-amber-400' : 'text-cyan-400'}`}>
-                                {u.username?.charAt(0).toUpperCase()}
+                                {u.username?.charAt(0).toUpperCase() || 'U'}
                               </span>
                             </div>
                             <div>

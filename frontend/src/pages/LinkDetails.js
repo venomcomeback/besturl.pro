@@ -4,10 +4,8 @@ import axios from 'axios';
 import { 
   ArrowLeft, Copy, ExternalLink, Trash2, Edit,
   MousePointerClick, Monitor, Smartphone, Tablet, Globe,
-  Clock, TrendingUp, Users, Chrome, Calendar
+  TrendingUp, Users, Calendar
 } from 'lucide-react';
-
-const DOMAIN = 'besturl.pro';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
@@ -24,7 +22,9 @@ import {
   PieChart, Pie, Cell, BarChart, Bar
 } from 'recharts';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL + '/api';
+// VPS için sabit API URL
+const API_URL = 'https://besturl.pro/api';
+const DOMAIN = 'besturl.pro';
 
 const COLORS = ['#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6', '#EC4899'];
 
@@ -45,8 +45,8 @@ const LinkDetails = () => {
       });
       setAnalytics(response.data);
       setEditData({
-        title: response.data.link?.title || '',
-        is_active: response.data.link?.is_active !== false
+        title: response.data?.link?.title || '',
+        is_active: response.data?.link?.is_active !== false
       });
     } catch (error) {
       console.error('Failed to fetch analytics:', error);
@@ -99,14 +99,6 @@ const LinkDetails = () => {
     return `https://${DOMAIN}/${shortCode}`;
   };
 
-  const getDeviceIcon = (device) => {
-    switch(device) {
-      case 'mobile': return <Smartphone className="w-4 h-4" />;
-      case 'tablet': return <Tablet className="w-4 h-4" />;
-      default: return <Monitor className="w-4 h-4" />;
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-[#0A0A0B] flex items-center justify-center">
@@ -115,16 +107,24 @@ const LinkDetails = () => {
     );
   }
 
-  if (!analytics) return null;
+  if (!analytics || !analytics.link) return null;
 
   const { link, total_clicks, devices, browsers, os_stats, countries, referrers, daily_clicks } = analytics;
 
+  // Kurşun geçirmez veri hazırlığı
+  const safeDevices = devices && typeof devices === 'object' ? devices : {};
+  const safeBrowsers = browsers && typeof browsers === 'object' ? browsers : {};
+  const safeCountries = countries && typeof countries === 'object' ? countries : {};
+  const safeReferrers = referrers && typeof referrers === 'object' ? referrers : {};
+  const safeOsStats = os_stats && typeof os_stats === 'object' ? os_stats : {};
+  const safeDailyClicks = Array.isArray(daily_clicks) ? daily_clicks : [];
+
   // Prepare chart data
-  const deviceData = Object.entries(devices).map(([name, value]) => ({ name, value }));
-  const browserData = Object.entries(browsers).map(([name, value]) => ({ name, value }));
-  const countryData = Object.entries(countries).map(([name, value]) => ({ name, value }));
-  const referrerData = Object.entries(referrers).slice(0, 5).map(([name, value]) => ({ 
-    name: name === 'Doğrudan' ? 'Doğrudan' : name.substring(0, 20), 
+  const deviceData = Object.entries(safeDevices).map(([name, value]) => ({ name, value }));
+  const browserData = Object.entries(safeBrowsers).map(([name, value]) => ({ name, value }));
+  const countryData = Object.entries(safeCountries).map(([name, value]) => ({ name, value }));
+  const referrerData = Object.entries(safeReferrers).slice(0, 5).map(([name, value]) => ({ 
+    name: name === 'Doğrudan' ? 'Doğrudan' : (name || '').substring(0, 20), 
     value 
   }));
 
@@ -195,7 +195,7 @@ const LinkDetails = () => {
               </div>
             </div>
             <p className="text-sm text-slate-500 mb-1">Toplam Tıklama</p>
-            <p className="text-2xl font-bold text-white">{total_clicks}</p>
+            <p className="text-2xl font-bold text-white">{total_clicks || 0}</p>
           </div>
 
           <div className="stat-card">
@@ -205,8 +205,8 @@ const LinkDetails = () => {
               </div>
             </div>
             <p className="text-sm text-slate-500 mb-1">Durum</p>
-            <p className={`text-lg font-semibold ${link.is_active ? 'text-emerald-400' : 'text-red-400'}`}>
-              {link.is_active ? 'Aktif' : 'Pasif'}
+            <p className={`text-lg font-semibold ${link.is_active !== false ? 'text-emerald-400' : 'text-red-400'}`}>
+              {link.is_active !== false ? 'Aktif' : 'Pasif'}
             </p>
           </div>
 
@@ -217,7 +217,7 @@ const LinkDetails = () => {
               </div>
             </div>
             <p className="text-sm text-slate-500 mb-1">Benzersiz Cihaz</p>
-            <p className="text-2xl font-bold text-white">{Object.keys(devices).length}</p>
+            <p className="text-2xl font-bold text-white">{Object.keys(safeDevices).length}</p>
           </div>
 
           <div className="stat-card">
@@ -228,7 +228,7 @@ const LinkDetails = () => {
             </div>
             <p className="text-sm text-slate-500 mb-1">Oluşturulma</p>
             <p className="text-sm font-medium text-white">
-              {new Date(link.created_at).toLocaleDateString('tr-TR')}
+              {link.created_at ? new Date(link.created_at).toLocaleDateString('tr-TR') : '-'}
             </p>
           </div>
         </div>
@@ -239,12 +239,18 @@ const LinkDetails = () => {
           <div className="chart-container col-span-full">
             <h3 className="text-lg font-semibold text-white mb-6">Günlük Tıklamalar (Son 30 Gün)</h3>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={daily_clicks}>
+              <LineChart data={safeDailyClicks}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
                 <XAxis 
                   dataKey="date" 
                   stroke="#64748B"
-                  tickFormatter={(value) => new Date(value).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short' })}
+                  tickFormatter={(value) => {
+                    try {
+                      return new Date(value).toLocaleDateString('tr-TR', { day: '2-digit', month: 'short' });
+                    } catch {
+                      return value;
+                    }
+                  }}
                 />
                 <YAxis stroke="#64748B" />
                 <Tooltip 
@@ -254,7 +260,13 @@ const LinkDetails = () => {
                     borderRadius: '8px',
                     color: '#F8FAFC'
                   }}
-                  labelFormatter={(value) => new Date(value).toLocaleDateString('tr-TR')}
+                  labelFormatter={(value) => {
+                    try {
+                      return new Date(value).toLocaleDateString('tr-TR');
+                    } catch {
+                      return value;
+                    }
+                  }}
                 />
                 <Line 
                   type="monotone" 
@@ -381,9 +393,9 @@ const LinkDetails = () => {
               <Monitor className="w-5 h-5 text-cyan-400" />
               <h3 className="text-lg font-semibold text-white">İşletim Sistemi</h3>
             </div>
-            {Object.keys(os_stats).length > 0 ? (
+            {Object.keys(safeOsStats).length > 0 ? (
               <div className="space-y-3">
-                {Object.entries(os_stats).slice(0, 5).map(([name, value], index) => (
+                {Object.entries(safeOsStats).slice(0, 5).map(([name, value], index) => (
                   <div key={index} className="flex items-center justify-between">
                     <span className="text-slate-300">{name}</span>
                     <span className="text-cyan-400 font-medium">{value}</span>

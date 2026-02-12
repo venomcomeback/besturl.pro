@@ -3,7 +3,8 @@ import axios from 'axios';
 
 const AuthContext = createContext(null);
 
-const API_URL = process.env.REACT_APP_BACKEND_URL + '/api';
+// VPS için sabit API URL
+const API_URL = 'https://besturl.pro/api';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);

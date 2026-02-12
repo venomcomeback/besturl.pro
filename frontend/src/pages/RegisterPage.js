@@ -68,7 +68,7 @@ const RegisterPage = () => {
           </p>
 
           <div className="space-y-4">
-            {benefits.map((benefit, index) => (
+            {(Array.isArray(benefits) ? benefits : []).map((benefit, index) => (
               <div key={index} className="flex items-center gap-3">
                 <div className="w-6 h-6 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
                   <Check className="w-4 h-4 text-cyan-400" />
@@ -91,7 +91,7 @@ const RegisterPage = () => {
               </div>
             </div>
             <p className="text-slate-400 text-sm italic">
-              "LinkShortTR sayesinde kampanya linklerimi çok daha profesyonel yönetebiliyorum. Analitik özellikleri gerçekten harika!"
+              "BestURL sayesinde kampanya linklerimi çok daha profesyonel yönetebiliyorum. Analitik özellikleri gerçekten harika!"
             </p>
           </div>
         </div>

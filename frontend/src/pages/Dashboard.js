@@ -4,16 +4,13 @@ import axios from 'axios';
 import { QRCodeSVG } from 'qrcode.react';
 import { 
   BarChart3, Plus, Search, Copy, ExternalLink, 
-  Trash2, Edit, QrCode, MoreVertical, Home, Settings,
+  Trash2, QrCode, MoreVertical, Home,
   LogOut, Shield, TrendingUp, MousePointerClick, Calendar,
-  Menu, X, Eye, EyeOff, Lock, Clock, Download
+  Menu, X, Lock, Clock, Download
 } from 'lucide-react';
-
-const API_URL = process.env.REACT_APP_BACKEND_URL + '/api';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Switch } from '../components/ui/switch';
 import {
   Dialog,
   DialogContent,
@@ -30,6 +27,8 @@ import {
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
 
+// VPS için sabit API URL
+const API_URL = 'https://besturl.pro/api';
 const DOMAIN = 'besturl.pro';
 
 const Dashboard = () => {
@@ -67,9 +66,11 @@ const Dashboard = () => {
       const response = await axios.get(`${API_URL}/links`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setLinks(response.data);
+      // Kurşun geçirmez veri kontrolü
+      setLinks(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error('Failed to fetch links:', error);
+      setLinks([]);
       toast.error('Linkler yüklenemedi');
     }
   }, [token]);
@@ -79,7 +80,12 @@ const Dashboard = () => {
       const response = await axios.get(`${API_URL}/analytics/overview`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setStats(response.data);
+      setStats(response.data || {
+        total_links: 0,
+        active_links: 0,
+        total_clicks: 0,
+        today_clicks: 0
+      });
     } catch (error) {
       console.error('Failed to fetch stats:', error);
     }
@@ -160,10 +166,11 @@ const Dashboard = () => {
     return `https://${DOMAIN}/${shortCode}`;
   };
 
-  const filteredLinks = links.filter(link => 
-    link.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    link.original_url?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    link.short_code?.toLowerCase().includes(searchQuery.toLowerCase())
+  // Kurşun geçirmez filter
+  const filteredLinks = (Array.isArray(links) ? links : []).filter(link => 
+    link?.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    link?.original_url?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    link?.short_code?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleLogout = () => {
@@ -210,12 +217,12 @@ const Dashboard = () => {
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full bg-cyan-500/20 flex items-center justify-center">
                 <span className="text-cyan-400 font-semibold">
-                  {user?.username?.charAt(0).toUpperCase()}
+                  {user?.username?.charAt(0).toUpperCase() || 'U'}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-white font-medium truncate">{user?.username}</p>
-                <p className="text-sm text-slate-500 truncate">{user?.email}</p>
+                <p className="text-white font-medium truncate">{user?.username || 'Kullanıcı'}</p>
+                <p className="text-sm text-slate-500 truncate">{user?.email || ''}</p>
               </div>
             </div>
             <Button 
@@ -276,7 +283,7 @@ const Dashboard = () => {
                 </div>
               </div>
               <p className="text-sm text-slate-500 mb-1">Toplam Link</p>
-              <p className="text-2xl font-bold text-white">{stats.total_links}</p>
+              <p className="text-2xl font-bold text-white">{stats.total_links || 0}</p>
             </div>
 
             <div className="stat-card" data-testid="stat-active-links">
@@ -286,7 +293,7 @@ const Dashboard = () => {
                 </div>
               </div>
               <p className="text-sm text-slate-500 mb-1">Aktif Link</p>
-              <p className="text-2xl font-bold text-white">{stats.active_links}</p>
+              <p className="text-2xl font-bold text-white">{stats.active_links || 0}</p>
             </div>
 
             <div className="stat-card" data-testid="stat-total-clicks">
@@ -296,7 +303,7 @@ const Dashboard = () => {
                 </div>
               </div>
               <p className="text-sm text-slate-500 mb-1">Toplam Tıklama</p>
-              <p className="text-2xl font-bold text-white">{stats.total_clicks}</p>
+              <p className="text-2xl font-bold text-white">{stats.total_clicks || 0}</p>
             </div>
 
             <div className="stat-card" data-testid="stat-today-clicks">
@@ -306,7 +313,7 @@ const Dashboard = () => {
                 </div>
               </div>
               <p className="text-sm text-slate-500 mb-1">Bugünkü Tıklama</p>
-              <p className="text-2xl font-bold text-white">{stats.today_clicks}</p>
+              <p className="text-2xl font-bold text-white">{stats.today_clicks || 0}</p>
             </div>
           </div>
 
@@ -356,7 +363,7 @@ const Dashboard = () => {
               </div>
             ) : (
               <div className="divide-y divide-white/5">
-                {filteredLinks.map((link) => (
+                {(Array.isArray(filteredLinks) ? filteredLinks : []).map((link) => (
                   <div 
                     key={link.id} 
                     className="p-4 sm:p-6 hover:bg-white/[0.02] transition-colors duration-200"
@@ -392,7 +399,7 @@ const Dashboard = () => {
 
                       <div className="flex items-center gap-4">
                         <div className="text-right">
-                          <p className="text-lg font-semibold text-white">{link.click_count}</p>
+                          <p className="text-lg font-semibold text-white">{link.click_count || 0}</p>
                           <p className="text-xs text-slate-500">tıklama</p>
                         </div>
 

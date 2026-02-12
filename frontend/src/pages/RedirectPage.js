@@ -6,7 +6,8 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { toast } from 'sonner';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL + '/api';
+// VPS için sabit API URL
+const API_URL = 'https://besturl.pro/api';
 
 const RedirectPage = () => {
   const { shortCode } = useParams();
@@ -20,15 +21,44 @@ const RedirectPage = () => {
   useEffect(() => {
     const checkLink = async () => {
       try {
-        const response = await axios.get(`${API_URL}/r/${shortCode}`);
+        // API'ye istek at - kısa linki sorgula
+        const response = await axios.get(`${API_URL}/r/${shortCode}`, {
+          maxRedirects: 0,
+          validateStatus: (status) => status < 400 || status === 302
+        });
         
-        // If we get requires_password response
+        // Şifre gerekiyorsa
         if (response.data?.requires_password) {
           setRequiresPassword(true);
           setLoading(false);
+          return;
         }
-        // Otherwise, the redirect happened via 302
+
+        // 302 redirect varsa veya redirect_url dönüyorsa
+        if (response.status === 302 || response.headers.location) {
+          window.location.href = response.headers.location;
+          return;
+        }
+
+        // response.data içinde redirect URL varsa
+        if (response.data?.redirect_url) {
+          window.location.href = response.data.redirect_url;
+          return;
+        }
+        
+        // Axios otomatik redirect yaptıysa (final URL'e geldik)
+        // Bu durumda response.request.responseURL'i kontrol edebiliriz
+        setLoading(false);
       } catch (error) {
+        // 302 redirect axios'ta error olarak gelir
+        if (error.response?.status === 302) {
+          const location = error.response.headers?.location;
+          if (location) {
+            window.location.href = location;
+            return;
+          }
+        }
+
         const status = error.response?.status;
         const detail = error.response?.data?.detail;
         
@@ -36,6 +66,8 @@ const RedirectPage = () => {
           setError('Bu link bulunamadı');
         } else if (status === 410) {
           setError(detail || 'Bu link artık aktif değil');
+        } else if (error.response?.data?.requires_password) {
+          setRequiresPassword(true);
         } else {
           setError('Bir hata oluştu');
         }
@@ -43,7 +75,9 @@ const RedirectPage = () => {
       }
     };
 
-    checkLink();
+    if (shortCode) {
+      checkLink();
+    }
   }, [shortCode]);
 
   const handlePasswordSubmit = async (e) => {
