@@ -457,7 +457,8 @@ async def redirect_link(short_code: str, request: Request):
     
     click_dict = click.model_dump()
     click_dict["timestamp"] = click_dict["timestamp"].isoformat()
-    await db.clicks.insert_one(click_dict)
+    insert_click = click_dict.copy()
+    await db.clicks.insert_one(insert_click)
     
     # Increment click count
     await db.links.update_one({"id": link["id"]}, {"$inc": {"click_count": 1}})
