@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { QRCodeSVG } from 'qrcode.react';
 import { 
   Link2, BarChart3, Plus, Search, Copy, ExternalLink, 
   Trash2, Edit, QrCode, MoreVertical, Home, Settings,
   LogOut, Shield, TrendingUp, MousePointerClick, Calendar,
-  Menu, X, Eye, EyeOff, Lock, Clock
+  Menu, X, Eye, EyeOff, Lock, Clock, Download
 } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -553,24 +554,49 @@ const Dashboard = () => {
           </DialogHeader>
 
           <div className="flex flex-col items-center py-6">
-            <div className="bg-white rounded-2xl p-6 mb-6">
-              {/* Simple QR placeholder - in real app use qrcode library */}
-              <div className="w-48 h-48 bg-[#0A0A0B] rounded-xl grid grid-cols-8 gap-0.5 p-4">
-                {[...Array(64)].map((_, i) => (
-                  <div 
-                    key={i} 
-                    className={`rounded-[2px] ${Math.random() > 0.5 ? 'bg-cyan-500' : 'bg-transparent'}`} 
-                  />
-                ))}
-              </div>
+            <div id="qr-code-container" className="bg-white rounded-2xl p-6 mb-6">
+              {selectedLink && (
+                <QRCodeSVG 
+                  value={getShortUrl(selectedLink.short_code)}
+                  size={192}
+                  level="H"
+                  includeMargin={false}
+                  fgColor="#0A0A0B"
+                  bgColor="#FFFFFF"
+                />
+              )}
             </div>
             <code className="text-cyan-400 text-sm font-mono mb-4">
               {selectedLink && getShortUrl(selectedLink.short_code)}
             </code>
             <Button 
               className="bg-cyan-600 hover:bg-cyan-500"
-              onClick={() => toast.success('QR kod indirildi!')}
+              onClick={() => {
+                const svg = document.querySelector('#qr-code-container svg');
+                if (svg) {
+                  const svgData = new XMLSerializer().serializeToString(svg);
+                  const canvas = document.createElement('canvas');
+                  const ctx = canvas.getContext('2d');
+                  const img = new Image();
+                  img.onload = () => {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                    const pngFile = canvas.toDataURL('image/png');
+                    const downloadLink = document.createElement('a');
+                    downloadLink.download = `qr-${selectedLink?.short_code || 'code'}.png`;
+                    downloadLink.href = pngFile;
+                    downloadLink.click();
+                    toast.success('QR kod indirildi!');
+                  };
+                  img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+                }
+              }}
+              data-testid="download-qr-btn"
             >
+              <Download className="w-4 h-4 mr-2" />
               PNG Olarak İndir
             </Button>
           </div>
